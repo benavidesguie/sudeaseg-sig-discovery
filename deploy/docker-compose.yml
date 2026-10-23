@@ -1,0 +1,68 @@
+# Despliegue en servidor: PostgreSQL + portal + Caddy (HTTPS automático con Let's Encrypt).
+# Uso: ver deploy/README.md. Las variables se leen de deploy/.env (lo genera install.sh).
+name: relevamiento
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: relevamiento
+      POSTGRES_USER: relevamiento
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Falta POSTGRES_PASSWORD en deploy/.env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U relevamiento -d relevamiento"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build:
+      context: ..
+    image: relevamiento-app:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://relevamiento:${POSTGRES_PASSWORD}@db:5432/relevamiento?schema=public
+      AUTH_SECRET: ${AUTH_SECRET:?Falta AUTH_SECRET en deploy/.env}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?Falta ADMIN_EMAIL en deploy/.env}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Falta ADMIN_PASSWORD en deploy/.env}
+      ADMIN_NAME: ${ADMIN_NAME:-Consultor BI}
+      UPLOAD_DIR: /app/storage/uploads
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-25}
+      INSECURE_COOKIES: ${INSECURE_COOKIES:-0}
+    volumes:
+      - uploads:/app/storage
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/login').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      start_period: 60s
+      retries: 5
+
+  caddy:
+    image: caddy:2.8.4-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:?Falta SITE_ADDRESS en deploy/.env}
+      ACME_EMAIL: ${ACME_EMAIL:?Falta ACME_EMAIL en deploy/.env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  pgdata:
+  uploads:
+  caddy_data:
+  caddy_config:

@@ -31,6 +31,8 @@ export async function POST(req: Request, { params }: Ctx) {
   if (!(await isSystemKpiLinked(code)))
     return bad("Este sistema no está vinculado a ningún KPI. Según la regla KPI-Driven Discovery, la carga técnica aún no está habilitada.", 409);
 
+  if (Number(req.headers.get("content-length") ?? 0) > MAX_UPLOAD_BYTES + 1024 * 1024)
+    return bad(`El archivo supera el máximo de ${MAX_UPLOAD_BYTES / 1024 / 1024} MB.`, 413);
   const form = await req.formData().catch(() => null);
   const file = form?.get("file");
   if (!(file instanceof File) || file.size === 0) return bad("Seleccione un archivo.");

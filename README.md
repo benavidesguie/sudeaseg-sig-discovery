@@ -6,7 +6,11 @@ Aplicación web para capturar de forma asincrónica, guiada y validada la inform
 
 ## Puesta en marcha
 
-### Opción A: Docker Compose
+### En un servidor (producción)
+
+Siga la guía [`deploy/README.md`](deploy/README.md): un script instala Docker, genera los secretos, levanta PostgreSQL, el portal y Caddy (HTTPS automático) y programa respaldos diarios.
+
+### Opción A: Docker Compose (prueba local)
 
 ```bash
 export AUTH_SECRET="$(openssl rand -hex 32)"

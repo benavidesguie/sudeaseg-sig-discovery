@@ -7,3 +7,5 @@ next-env.d.ts
 .env.local
 storage/uploads/
 .DS_Store
+deploy/.env
+deploy/backups/

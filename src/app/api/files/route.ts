@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/server/db";
-import { assertModule, AuthError, type CurrentUser } from "@/lib/server/auth";
+import { getCurrentUser } from "@/lib/server/auth";
+import { canAccess } from "@/lib/permissions";
 import { formsLockedFor } from "@/lib/server/project";
 import { logActivity } from "@/lib/server/activity";
 import { ALLOWED_EXTENSIONS, MAX_UPLOAD_BYTES, extensionOf, mimeFor, saveFile } from "@/lib/server/storage";
@@ -15,17 +16,17 @@ function bad(message: string, status = 400) {
 
 // Carga de adjuntos: documentación de sistema (Módulo 1 · Bloque C) y evidencias de KPI (Módulo 2 · Bloque D).
 export async function POST(req: Request) {
-  let user: CurrentUser;
+  // La sesión se valida antes de leer el cuerpo para no procesar cargas anónimas.
+  const user = await getCurrentUser();
+  if (!user) return bad("Sesión expirada. Vuelva a iniciar sesión.", 401);
+  const declared = Number(req.headers.get("content-length") ?? 0);
+  if (declared > MAX_UPLOAD_BYTES + 1024 * 1024) return bad(`El archivo supera el máximo de ${MAX_UPLOAD_BYTES / 1024 / 1024} MB.`, 413);
+
   const form = await req.formData().catch(() => null);
   if (!form) return bad("Solicitud no válida.");
   const kind = String(form.get("kind") ?? "") as AttachmentKind;
   if (!(kind in ATTACHMENT_KINDS) || kind === "SCHEMA_UPLOAD") return bad("Tipo de adjunto no válido.");
-
-  try {
-    user = await assertModule(kind === "SYSTEM_DOC" ? "m1" : "m2");
-  } catch (err) {
-    return bad(err instanceof AuthError ? err.message : "No autorizado.", 403);
-  }
+  if (!canAccess(user.role, kind === "SYSTEM_DOC" ? "m1" : "m2")) return bad("No tiene permisos para esta acción.", 403);
   if (kind === "SYSTEM_DOC" && user.role === "BUSINESS")
     return bad("La documentación técnica la carga el custodio técnico.", 403);
   if (await formsLockedFor(user)) return bad("El catálogo aún no ha sido confirmado (Fase 0).", 403);

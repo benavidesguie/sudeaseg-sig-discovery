@@ -1,13 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { SESSION_COOKIE, verifySession } from "@/lib/session-token";
 
-// Redirige a /login cualquier ruta protegida sin sesión válida.
+// Redirige a /login cualquier página protegida sin sesión válida.
 // La verificación fina (usuario activo, rol) se repite en cada página y acción.
+// Las rutas /api quedan fuera: cada handler valida la sesión por sí mismo, y pasar por el
+// middleware truncaría los adjuntos de más de 10 MB (middlewareClientMaxBodySize).
 export async function middleware(req: NextRequest) {
   const session = await verifySession(req.cookies.get(SESSION_COOKIE)?.value);
   if (session) return NextResponse.next();
-  if (req.nextUrl.pathname.startsWith("/api/"))
-    return NextResponse.json({ error: "No autenticado" }, { status: 401 });
   const url = req.nextUrl.clone();
   url.pathname = "/login";
   url.search = req.nextUrl.pathname === "/" ? "" : `?next=${encodeURIComponent(req.nextUrl.pathname + req.nextUrl.search)}`;
@@ -15,5 +15,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!login|_next/static|_next/image|favicon.ico|icon.svg).*)"],
+  matcher: ["/((?!api/|login|_next/static|_next/image|favicon.ico|icon.svg).*)"],
 };
