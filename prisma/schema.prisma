@@ -1,0 +1,227 @@
+// Modelo de datos del Portal de Relevamiento (ver PRD §5).
+// Los valores de catálogo (dominios, niveles de acceso, motores, etc.) se guardan
+// como texto y se validan en la aplicación (src/lib/catalogs.ts), igual que en el
+// esquema SQL sugerido. Los campos "obligatorios" del PRD son opcionales en BD para
+// permitir el guardado parcial (borrador); la obligatoriedad se exige al marcar
+// una ficha como completada.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  BUSINESS
+  TECH
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  name         String
+  passwordHash String   @map("password_hash")
+  role         Role
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  spocBusinessFor SystemInventory[] @relation("SpocBusiness")
+  spocTechFor     SystemInventory[] @relation("SpocTech")
+  attachments     Attachment[]
+  activity        ActivityLog[]
+
+  @@map("users")
+}
+
+// Estado global del proyecto (fila única, id = 1). Fase 0: hasta que el admin
+// confirma el catálogo semilla, los formularios quedan bloqueados para el resto.
+model ProjectSettings {
+  id                 Int       @id @default(1)
+  catalogConfirmedAt DateTime? @map("catalog_confirmed_at")
+  catalogConfirmedBy String?   @map("catalog_confirmed_by")
+
+  @@map("project_settings")
+}
+
+// 1. Tabla maestra de los 22 sistemas (Fases 0, 1 y 3)
+model SystemInventory {
+  id         String @id @default(uuid()) @db.Uuid
+  systemCode String @unique @map("system_code") @db.VarChar(10)
+
+  // Fase 0: catálogo semilla
+  commonName     String? @map("common_name") @db.VarChar(150)
+  spocBusinessId String? @map("spoc_business_id") @db.Uuid
+  spocTechId     String? @map("spoc_tech_id") @db.Uuid
+  spocBusiness   User?   @relation("SpocBusiness", fields: [spocBusinessId], references: [id], onDelete: SetNull)
+  spocTech       User?   @relation("SpocTech", fields: [spocTechId], references: [id], onDelete: SetNull)
+
+  // Módulo 1 · Bloque A
+  officialName     String? @map("official_name") @db.VarChar(150)
+  internalAlias    String? @map("internal_alias") @db.VarChar(150)
+  version          String? @db.VarChar(50)
+  businessDomain   String? @map("business_domain") @db.VarChar(50)
+  userDepartments  Json    @default("[]") @map("user_departments")
+  activeUsersRange String? @map("active_users_range") @db.VarChar(30)
+  kpiCriticality   String? @map("kpi_criticality") @db.VarChar(20)
+
+  // Módulo 1 · Bloque B
+  businessOwner Json?   @map("business_owner") // {name, role, email, phone}
+  techCustodian Json?   @map("tech_custodian") // {name, role, email, phone}
+  solutionType  String? @map("solution_type") @db.VarChar(50)
+  accessLevel   String? @map("access_level") @db.VarChar(50)
+  vendorInfo    Json?   @map("vendor_info") // {vendor_name, vendor_contact_email, has_active_support_contract, requires_extra_fee}
+
+  // Módulo 1 · Bloque C
+  hostingType String? @map("hosting_type") @db.VarChar(50)
+  dbEngine    String? @map("db_engine") @db.VarChar(50)
+  techStack   String? @map("tech_stack") @db.VarChar(100)
+  docStatus   Json    @default("[]") @map("doc_status")
+
+  // Módulo 4 · Conectividad y volumetría
+  integrationPattern       String?  @map("integration_pattern") @db.VarChar(50)
+  networkRequirements      Json     @default("[]") @map("network_requirements")
+  supportsIncrementalLoad  Boolean? @map("supports_incremental_load")
+  historicalVolumeEstimate String?  @map("historical_volume_estimate") @db.VarChar(50)
+  extractionWindow         String?  @map("extraction_window") @db.VarChar(100)
+
+  // Estado de avance
+  phase1Status          String    @default("PENDING") @map("phase1_status") @db.VarChar(20)
+  phase2SchemaUploaded  Boolean   @default(false) @map("phase2_schema_uploaded")
+  phase2SchemaUpdatedAt DateTime? @map("phase2_schema_uploaded_at")
+  phase3Status          String    @default("PENDING") @map("phase3_status") @db.VarChar(20)
+  waveNumber            Int?      @map("wave_number")
+  vendorRiskAlert       Boolean   @default(false) @map("vendor_risk_alert")
+  updatedAt             DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  rawSchema   SystemRawSchema[]
+  variables   KpiSourceVariable[]
+  attachments Attachment[]
+
+  @@map("systems_inventory")
+}
+
+// 2. Diccionario de datos crudo importado vía INFORMATION_SCHEMA (Fase 2 TI)
+model SystemRawSchema {
+  id            String          @id @default(uuid()) @db.Uuid
+  systemCode    String          @map("system_code") @db.VarChar(10)
+  system        SystemInventory @relation(fields: [systemCode], references: [systemCode], onDelete: Cascade)
+  tableSchema   String?         @map("table_schema") @db.VarChar(100)
+  tableName     String          @map("table_name") @db.VarChar(150)
+  columnName    String          @map("column_name") @db.VarChar(150)
+  dataType      String          @map("data_type") @db.VarChar(100)
+  isNullable    String?         @map("is_nullable") @db.VarChar(10)
+  charMaxLength Int?            @map("char_max_length")
+  ordinal       Int             @default(0)
+  uploadedAt    DateTime        @default(now()) @map("uploaded_at")
+
+  @@index([systemCode, tableName])
+  @@map("system_raw_schemas")
+}
+
+// 3. Catálogo de indicadores - KPI Canvas (Fase 2 Negocio)
+model KpiCatalog {
+  id                       String   @id @default(uuid()) @db.Uuid
+  kpiCode                  String   @unique @map("kpi_code") @db.VarChar(30)
+  kpiName                  String   @map("kpi_name") @db.VarChar(200)
+  businessDomain           String   @map("business_domain") @db.VarChar(50)
+  kpiObjective             String?  @map("kpi_objective")
+  unitOfMeasure            String?  @map("unit_of_measure") @db.VarChar(30)
+  frequency                String?  @db.VarChar(30)
+  trendDirection           String?  @map("trend_direction") @db.VarChar(30)
+  calculationFormula       String?  @map("calculation_formula")
+  businessRules            String?  @map("business_rules")
+  dimensions               Json     @default("[]")
+  currentCalculationMethod String?  @map("current_calculation_method") @db.VarChar(50)
+  status                   String   @default("DRAFT") @db.VarChar(20) // DRAFT | BUSINESS_COMPLETED | TECH_MAPPED
+  createdById              String?  @map("created_by_id") @db.Uuid
+  createdAt                DateTime @default(now()) @map("created_at")
+  updatedAt                DateTime @default(now()) @updatedAt @map("updated_at")
+
+  variables   KpiSourceVariable[]
+  attachments Attachment[]
+
+  @@map("kpi_catalog")
+}
+
+// 4. Matriz de trazabilidad Variable → Sistema → Campo físico (Fase 2 Negocio + TI)
+model KpiSourceVariable {
+  id       String     @id @default(uuid()) @db.Uuid
+  kpiId    String     @map("kpi_id") @db.Uuid
+  kpi      KpiCatalog @relation(fields: [kpiId], references: [id], onDelete: Cascade)
+  position Int        @default(0)
+  varName  String     @default("") @map("var_name") @db.VarChar(150)
+
+  sourceSystemCode String?          @map("source_system_code") @db.VarChar(10)
+  sourceSystem     SystemInventory? @relation(fields: [sourceSystemCode], references: [systemCode])
+
+  // Llenado por el usuario funcional (Follow the Data)
+  screenModuleName    String  @default("") @map("screen_module_name") @db.VarChar(200)
+  sampleTransactionId String  @default("") @map("sample_transaction_id") @db.VarChar(100)
+  existsInOtherSystem Boolean @default(false) @map("exists_in_other_system")
+  isSystemOfRecord    Boolean @default(true) @map("is_system_of_record")
+
+  // Completado por TI / Arquitecto BI al cruzar con system_raw_schemas
+  physicalTableName     String?   @map("physical_table_name") @db.VarChar(150)
+  physicalColumnName    String?   @map("physical_column_name") @db.VarChar(150)
+  primaryKeyColumn      String?   @map("primary_key_column") @db.VarChar(150)
+  incrementalDateColumn String?   @map("incremental_date_column") @db.VarChar(150)
+  transformationRule    String?   @map("transformation_rule")
+  mappedAt              DateTime? @map("mapped_at")
+
+  @@index([sourceSystemCode])
+  @@map("kpi_source_variables")
+}
+
+// 5. Homologación de datos maestros
+model MasterDataMapping {
+  id                 String   @id @default(uuid()) @db.Uuid
+  masterEntity       String   @map("master_entity") @db.VarChar(50)
+  canonicalCode      String   @map("canonical_code") @db.VarChar(50)
+  canonicalName      String   @map("canonical_name") @db.VarChar(150)
+  systemEquivalences Json     @default("{}") @map("system_equivalences") // {"SIS-01": "01", "SIS-04": "CCS"}
+  position           Int      @default(0)
+  updatedAt          DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@unique([masterEntity, canonicalCode])
+  @@map("master_data_mappings")
+}
+
+// Archivos adjuntos: documentación de sistemas, evidencias de KPI y esquemas subidos.
+model Attachment {
+  id           String           @id @default(uuid()) @db.Uuid
+  kind         String           @db.VarChar(40) // ver ATTACHMENT_KINDS en src/lib/catalogs.ts
+  systemCode   String?          @map("system_code") @db.VarChar(10)
+  system       SystemInventory? @relation(fields: [systemCode], references: [systemCode], onDelete: Cascade)
+  kpiId        String?          @map("kpi_id") @db.Uuid
+  kpi          KpiCatalog?      @relation(fields: [kpiId], references: [id], onDelete: Cascade)
+  originalName String           @map("original_name") @db.VarChar(255)
+  mimeType     String           @map("mime_type") @db.VarChar(150)
+  sizeBytes    Int              @map("size_bytes")
+  storagePath  String           @map("storage_path") @db.VarChar(255)
+  uploadedById String?          @map("uploaded_by_id") @db.Uuid
+  uploadedBy   User?            @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+  createdAt    DateTime         @default(now()) @map("created_at")
+
+  @@index([systemCode])
+  @@index([kpiId])
+  @@map("attachments")
+}
+
+// Bitácora de actividad para seguimiento del relevamiento.
+model ActivityLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  actorId   String?  @map("actor_id") @db.Uuid
+  actor     User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  action    String   @db.VarChar(60)
+  entity    String   @db.VarChar(40)
+  entityRef String   @map("entity_ref") @db.VarChar(60)
+  detail    String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@map("activity_log")
+}

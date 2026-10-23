@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: relevamiento
+      POSTGRES_USER: relevamiento
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cambiar-esta-clave}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U relevamiento -d relevamiento"]
+      interval: 5s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://relevamiento:${POSTGRES_PASSWORD:-cambiar-esta-clave}@db:5432/relevamiento?schema=public
+      AUTH_SECRET: ${AUTH_SECRET:?Defina AUTH_SECRET (32+ caracteres)}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:?Defina ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Defina ADMIN_PASSWORD}
+      ADMIN_NAME: ${ADMIN_NAME:-Consultor BI}
+      UPLOAD_DIR: /app/storage/uploads
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-25}
+      # Solo si el portal se sirve por HTTP sin TLS (no recomendado): permite la cookie de sesión.
+      INSECURE_COOKIES: ${INSECURE_COOKIES:-0}
+    volumes:
+      - uploads:/app/storage
+
+volumes:
+  pgdata:
+  uploads:
