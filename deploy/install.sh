@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Instalación del Portal de Relevamiento en un VPS Ubuntu 22.04/24.04 (o Debian 12).
 # Ejecutar como root desde la carpeta del repositorio clonado:  sudo bash deploy/install.sh
+# Sin preguntas (p. ej. desde un agente): ADMIN_EMAIL=... [ADMIN_NAME=...] [DOMAIN=...] sudo -E bash deploy/install.sh
 set -euo pipefail
 
 DEPLOY_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -44,11 +45,16 @@ fi
 # 4. Configuración (solo la primera vez)
 if [ ! -f "$ENV_FILE" ]; then
   say "Configuración inicial"
-  read -rp "Correo del administrador: " admin_email
+  admin_email="${ADMIN_EMAIL:-}"
+  admin_name="${ADMIN_NAME:-}"
+  domain="${DOMAIN:-}"
+  if [ -z "$admin_email" ]; then
+    read -rp "Correo del administrador: " admin_email
+    read -rp "Nombre del administrador [Consultor BI]: " admin_name
+    read -rp "Dominio del portal (deje vacío si aún no tiene): " domain
+  fi
   [ -n "$admin_email" ] || die "el correo es obligatorio"
-  read -rp "Nombre del administrador [Consultor BI]: " admin_name
   admin_name=${admin_name:-Consultor BI}
-  read -rp "Dominio del portal (deje vacío si aún no tiene): " domain
   if [ -z "$domain" ]; then
     ip=$(curl -fsS4 https://api.ipify.org || curl -fsS4 https://ifconfig.me || true)
     [ -n "$ip" ] || die "no se pudo detectar la IP pública; indique un dominio"

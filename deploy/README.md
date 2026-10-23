@@ -63,6 +63,12 @@ El script:
 
 Al terminar muestra la dirección y la contraseña del administrador. **Guárdela.**
 
+Para ejecutarlo sin preguntas (por ejemplo, desde Claude Code corriendo en el servidor):
+
+```bash
+ADMIN_EMAIL=admin@empresa.com ADMIN_NAME="Consultor BI" sudo -E bash deploy/install.sh   # agregue DOMAIN=... si ya tiene dominio
+```
+
 ### Sin dominio todavía
 
 Si deja el dominio vacío, el script usa la IP pública con [sslip.io](https://sslip.io): por ejemplo, la IP `203.0.113.5` queda como `https://203-0-113-5.sslip.io`. Ese nombre apunta automáticamente a su servidor y obtiene un certificado HTTPS válido, sin configurar nada. Sirve para empezar a trabajar con el cliente; cuando tengan dominio, cámbielo (sección 6).
