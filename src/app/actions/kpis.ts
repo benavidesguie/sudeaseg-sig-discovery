@@ -114,11 +114,11 @@ export async function saveKpi(
         });
       } catch (err) {
         if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") continue;
-        if (err instanceof Error && err.message === "NOT_FOUND") return { ok: false, error: "KPI no encontrado." };
+        if (err instanceof Error && err.message === "NOT_FOUND") return { ok: false, error: "Indicador no encontrado." };
         throw err;
       }
     }
-    if (!saved) return { ok: false, error: "No se pudo asignar un código al KPI. Intente nuevamente." };
+    if (!saved) return { ok: false, error: "No se pudo asignar un código al indicador. Intente nuevamente." };
 
     let errors: Record<string, string> = {};
     if (complete) {
@@ -135,11 +135,11 @@ export async function saveKpi(
     if (complete && Object.keys(errors).length)
       return {
         ok: false,
-        error: "Se guardó como borrador, pero faltan campos o evidencias obligatorias para completar el KPI.",
+        error: "Se guardó como borrador, pero faltan campos o evidencias obligatorias para completar el indicador.",
         fieldErrors: errors,
         data: result,
       };
-    return { ok: true, message: status === "DRAFT" ? "Borrador guardado." : "KPI completado.", data: result };
+    return { ok: true, message: status === "DRAFT" ? "Borrador guardado." : "Indicador completado.", data: result };
   } catch (err) {
     return fail(err);
   }
@@ -150,14 +150,14 @@ export async function deleteKpi(kpiId: string): Promise<ActionResult> {
     const user = await assertModule("m2");
     if (await formsLockedFor(user)) return { ok: false, error: LOCKED };
     const kpi = await prisma.kpiCatalog.findUnique({ where: { id: kpiId }, include: { attachments: true } });
-    if (!kpi) return { ok: false, error: "KPI no encontrado." };
+    if (!kpi) return { ok: false, error: "Indicador no encontrado." };
     if (user.role !== "ADMIN" && kpi.createdById !== user.id)
-      return { ok: false, error: "Solo quien creó el KPI o un administrador puede eliminarlo." };
+      return { ok: false, error: "Solo quien creó el indicador o un administrador puede eliminarlo." };
     await prisma.kpiCatalog.delete({ where: { id: kpiId } });
     await Promise.all(kpi.attachments.map((a) => deleteStoredFile(a.storagePath)));
     await logActivity(user.id, "KPI_DELETED", "KPI", kpi.kpiCode);
     revalidatePath("/", "layout");
-    return { ok: true, message: "KPI eliminado." };
+    return { ok: true, message: "Indicador eliminado." };
   } catch (err) {
     return fail(err);
   }

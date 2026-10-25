@@ -22,7 +22,7 @@ export async function saveMappings(systemCode: string, mappings: MappingInput[])
     if (await formsLockedFor(user))
       return { ok: false, error: "El catálogo de sistemas aún no ha sido confirmado por el administrador (Fase 0)." };
     if (!(await isSystemKpiLinked(systemCode)))
-      return { ok: false, error: "Este sistema no está vinculado a ningún KPI; el mapeo técnico no está habilitado." };
+      return { ok: false, error: "Este sistema no está vinculado a ningún indicador; el mapeo técnico no está habilitado." };
 
     const system = await prisma.systemInventory.findUnique({ where: { systemCode } });
     if (!system) return { ok: false, error: "Sistema no encontrado." };

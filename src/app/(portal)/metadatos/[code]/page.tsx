@@ -62,7 +62,7 @@ export default async function MetadataSystemPage({ params }: { params: Promise<{
         {locked && <LockedForms />}
         {!enabled && (
           <Notice tone="amber" title="Carga técnica no habilitada">
-            Este sistema aún no está vinculado a ningún KPI en el Módulo 2. Según la regla de prelación KPI-Driven Discovery, la
+            Este sistema aún no está vinculado a ningún indicador en el Módulo 2. Según la regla de prelación “primero los indicadores”, la
             carga técnica profunda se habilita cuando negocio lo use como fuente de al menos una variable.
           </Notice>
         )}
@@ -101,7 +101,7 @@ export default async function MetadataSystemPage({ params }: { params: Promise<{
         )}
 
         <Section
-          title="3 · Mesa de cruce “Follow the Data”"
+          title="3 · Mesa de cruce “Seguir el dato”"
           description="Para cada variable de negocio, ubique la tabla y columna física donde reside, su llave primaria y el campo de fecha para carga incremental. Use el ID de transacción de ejemplo y las capturas para encontrarla."
         >
           {enabled ? (
@@ -134,7 +134,7 @@ export default async function MetadataSystemPage({ params }: { params: Promise<{
               }))}
             />
           ) : (
-            <p className="text-sm text-slate-500">No hay variables de KPI que usen este sistema.</p>
+            <p className="text-sm text-slate-500">No hay variables de indicador que usen este sistema.</p>
           )}
         </Section>
       </div>

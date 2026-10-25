@@ -41,7 +41,7 @@ export async function saveCatalog(rows: CatalogRow[]): Promise<ActionResult> {
       if (r.spocTechId && !["TECH", "ADMIN"].includes(roleOf.get(r.spocTechId) ?? ""))
         fieldErrors[`${i}.spocTechId`] = "Debe ser un usuario técnico";
     });
-    if (Object.keys(fieldErrors).length) return { ok: false, error: "Revise los SPOC asignados.", fieldErrors };
+    if (Object.keys(fieldErrors).length) return { ok: false, error: "Revise los responsables asignados.", fieldErrors };
 
     await prisma.$transaction(
       parsed.data.map((r) =>
@@ -80,7 +80,7 @@ export async function confirmCatalog(): Promise<ActionResult> {
     if (systems.length < TOTAL_SYSTEMS || incomplete.length)
       return {
         ok: false,
-        error: `Para confirmar, los ${TOTAL_SYSTEMS} sistemas deben tener nombre común y SPOC funcional y técnico. Pendientes: ${incomplete.join(", ")}.`,
+        error: `Para confirmar, los ${TOTAL_SYSTEMS} sistemas deben tener nombre común y responsable funcional y técnico. Pendientes: ${incomplete.join(", ")}.`,
       };
     await prisma.projectSettings.upsert({
       where: { id: 1 },

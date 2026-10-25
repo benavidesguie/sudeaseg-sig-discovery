@@ -14,7 +14,7 @@ export default async function ConnectivityPage() {
     <>
       <PageHeader
         phase="Fase 3 · Módulo 4"
-        title="Checklist de conectividad, seguridad y volumetría"
+        title="Lista de verificación de conectividad, seguridad y volumetría"
         subtitle="Defina por sistema el patrón de extracción (Tipo A: BD directa, Tipo B: API, Tipo C: archivos SFTP, Tipo D: captura manual), los requisitos de red y la ventana de extracción."
       />
       <div className="mb-4 card p-4">

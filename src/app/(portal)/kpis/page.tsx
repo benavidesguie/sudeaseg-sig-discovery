@@ -22,7 +22,7 @@ export default async function KpisPage({ searchParams }: { searchParams: Promise
     <>
       <PageHeader
         phase="Fase 2A · Módulo 2"
-        title="KPI Canvas · Ficha y matriz de indicadores"
+        title="Indicadores de gestión · Ficha y matriz"
         subtitle="Registre cada indicador, su fórmula y reglas, y vincule cada variable con el sistema fuente (SIS-01..22) y una transacción real de ejemplo para que TI pueda seguir el dato."
         actions={
           !locked && (
@@ -48,7 +48,7 @@ export default async function KpisPage({ searchParams }: { searchParams: Promise
       </div>
       {kpis.length === 0 ? (
         <EmptyState title="Aún no hay indicadores registrados">
-          {locked ? "Los formularios se habilitarán cuando el administrador confirme el catálogo de sistemas." : "Use “Nuevo KPI” para documentar el primer indicador."}
+          {locked ? "Los formularios se habilitarán cuando el administrador confirme el catálogo de sistemas." : "Use “Nuevo indicador” para documentar el primer indicador."}
         </EmptyState>
       ) : (
         <div className="card overflow-x-auto">

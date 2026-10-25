@@ -12,7 +12,7 @@ export default async function NewKpiPage() {
   const locked = await formsLockedFor(user);
   return (
     <>
-      <PageHeader back={{ href: "/kpis", label: "KPI Canvas" }} phase="Fase 2A · Módulo 2" title="Nuevo indicador" />
+      <PageHeader back={{ href: "/kpis", label: "Indicadores de gestión" }} phase="Fase 2A · Módulo 2" title="Nuevo indicador" />
       {locked ? (
         <LockedForms />
       ) : (

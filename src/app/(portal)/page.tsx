@@ -18,9 +18,9 @@ const ACTIONS: Record<string, string> = {
   USER_UPDATED: "actualizó el usuario",
   SYSTEM_DRAFT_SAVED: "guardó borrador de la ficha",
   SYSTEM_COMPLETED: "completó la ficha",
-  KPI_DRAFT_SAVED: "guardó borrador del KPI",
-  KPI_COMPLETED: "completó el KPI",
-  KPI_DELETED: "eliminó el KPI",
+  KPI_DRAFT_SAVED: "guardó borrador del indicador",
+  KPI_COMPLETED: "completó el indicador",
+  KPI_DELETED: "eliminó el indicador",
   FILE_UPLOADED: "adjuntó un archivo a",
   FILE_DELETED: "eliminó un archivo de",
   SCHEMA_UPLOADED: "subió el esquema de",
@@ -102,7 +102,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
   return (
     <>
       <PageHeader
-        title="Dashboard de progreso"
+        title="Tablero de avance"
         subtitle="Vista ejecutiva del relevamiento de los 22 sistemas y los indicadores de gestión. Se actualiza en tiempo real con cada carga."
       />
       {denied && (
@@ -146,7 +146,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
           value={schemas}
           total={TOTAL_SYSTEMS}
           href={canAccess(user.role, "m3") ? "/metadatos" : undefined}
-          footer={`${kpis.filter((k) => k.status === "TECH_MAPPED").length} KPIs con trazabilidad física completa`}
+          footer={`${kpis.filter((k) => k.status === "TECH_MAPPED").length} indicadores con trazabilidad física completa`}
         />
         <StatCard
           phase="Fase 3"
@@ -154,7 +154,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
           value={phase3}
           total={TOTAL_SYSTEMS}
           href={canAccess(user.role, "m4") ? "/conectividad" : undefined}
-          footer="Checklist de conectividad, seguridad y volumetría completado"
+          footer="Lista de verificación de conectividad, seguridad y volumetría completada"
         />
       </div>
 
@@ -303,7 +303,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
 
       {user.role !== "ADMIN" && (
         <div className="mt-6 card p-5">
-          <h2 className="text-base font-semibold">Mis sistemas asignados (SPOC)</h2>
+          <h2 className="text-base font-semibold">Mis sistemas asignados (como responsable)</h2>
           {mine.length ? (
             <div className="mt-3 overflow-x-auto">
               <table className="data-table">
@@ -333,7 +333,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
               </table>
             </div>
           ) : (
-            <p className="mt-2 text-sm text-slate-500">No tiene sistemas asignados como SPOC.</p>
+            <p className="mt-2 text-sm text-slate-500">No tiene sistemas asignados como responsable.</p>
           )}
         </div>
       )}

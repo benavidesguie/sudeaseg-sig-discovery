@@ -15,7 +15,7 @@ export default async function UsersPage() {
     <>
       <PageHeader
         title="Usuarios y roles"
-        subtitle="Admin / Consultor BI: acceso total. Líder funcional / Key User: Módulos 1 (funcional), 2 y 5. Custodio técnico / DBA: Módulos 1 (técnico), 3 y 4."
+        subtitle="Administrador / Consultor BI: acceso total. Líder funcional / Usuario clave: Módulos 1 (funcional), 2 y 5. Custodio técnico / DBA: Módulos 1 (técnico), 3 y 4."
       />
       <UsersManager
         meId={me.id}

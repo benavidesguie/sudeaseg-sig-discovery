@@ -70,7 +70,7 @@ export function UsersManager({ users, meId }: { users: Row[]; meId: string }) {
                 <th>Usuario</th>
                 <th>Rol</th>
                 <th>Estado</th>
-                <th>SPOC de</th>
+                <th>Responsable de</th>
                 <th />
               </tr>
             </thead>

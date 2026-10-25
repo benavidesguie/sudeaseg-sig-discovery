@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Portal de Relevamiento · 22 Sistemas y KPIs",
+  title: "Inventario de Sistemas · SUDEASEG",
   description: "Captura estructurada y seguimiento del relevamiento de sistemas e indicadores de gestión.",
 };
 

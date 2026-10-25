@@ -39,7 +39,7 @@ const LABELS: Record<string, string> = {
   businessDomain: "Dominio de negocio",
   userDepartments: "Departamentos usuarios",
   activeUsersRange: "Usuarios activos",
-  kpiCriticality: "Criticidad para KPIs",
+  kpiCriticality: "Criticidad para indicadores",
   "businessOwner.name": "Dueño funcional · nombre",
   "businessOwner.role": "Dueño funcional · cargo",
   "businessOwner.email": "Dueño funcional · correo",
@@ -174,7 +174,7 @@ export function SystemWizard({
             />
             <RadioGroup
               className="sm:col-span-2"
-              label="Criticidad para KPIs"
+              label="Criticidad para indicadores"
               required
               options={C.KPI_CRITICALITIES}
               disabled={!editable("kpiCriticality")}
@@ -187,7 +187,7 @@ export function SystemWizard({
 
         {step === 1 && (
           <div className="space-y-4">
-            {contactBlock("businessOwner", "Dueño funcional / Data Steward", "Responsable del negocio sobre los datos del sistema (lo completa negocio).")}
+            {contactBlock("businessOwner", "Dueño funcional / Custodio de los datos", "Responsable del negocio sobre los datos del sistema (lo completa negocio).")}
             {contactBlock("techCustodian", "Custodio técnico interno", "Administrador técnico del sistema (lo completa TI).")}
             <Select label="Tipo de solución" required options={C.SOLUTION_TYPES} disabled={!editable("solutionType")} value={data.solutionType} error={err("solutionType")} onChange={(v) => set("solutionType", v)} />
             <RadioGroup label="Nivel de acceso" required options={C.ACCESS_LEVELS} disabled={!editable("accessLevel")} value={data.accessLevel} error={err("accessLevel")} onChange={(v) => set("accessLevel", v)} />
@@ -195,7 +195,7 @@ export function SystemWizard({
               <fieldset className="rounded-lg border-2 border-red-200 bg-red-50/50 p-4">
                 <legend className="px-1 text-sm font-semibold text-red-800">Información del proveedor (obligatoria)</legend>
                 <p className="mb-3 text-xs text-red-700">
-                  Este sistema se marcará con alerta roja de <strong>Riesgo de secuestro de datos / gestión de proveedor requerida</strong> en el Dashboard.
+                  Este sistema se marcará con alerta roja de <strong>Riesgo de secuestro de datos / gestión de proveedor requerida</strong> en el tablero de avance.
                 </p>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <TextInput label="Nombre del proveedor" required disabled={!editable("vendorInfo")} value={data.vendorInfo.vendor_name} error={err("vendorInfo.vendor_name")} onChange={(v) => setVendor("vendor_name", v)} />

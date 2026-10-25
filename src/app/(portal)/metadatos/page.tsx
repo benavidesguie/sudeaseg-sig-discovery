@@ -27,12 +27,12 @@ export default async function MetadataPage() {
       <PageHeader
         phase="Fase 2B · Módulo 3"
         title="Autodiagnóstico de metadatos y trazabilidad"
-        subtitle="Regla KPI-Driven Discovery: solo se habilita la carga técnica profunda de los sistemas vinculados al menos a un KPI del Módulo 2. TI no escribe diccionarios a mano: ejecuta el script, sube el resultado y vincula cada variable con su campo físico."
+        subtitle="Regla “primero los indicadores”: solo se habilita la carga técnica profunda de los sistemas vinculados al menos a un indicador del Módulo 2. TI no escribe diccionarios a mano: ejecuta el script, sube el resultado y vincula cada variable con su campo físico."
       />
       <div className="mb-4 grid gap-4 sm:grid-cols-2">
         <div className="card p-4">
           <div className="mb-2 flex justify-between text-sm">
-            <span className="font-medium">Sistemas priorizados (vinculados a KPIs)</span>
+            <span className="font-medium">Sistemas priorizados (vinculados a indicadores)</span>
             <span>{linked} / {TOTAL_SYSTEMS}</span>
           </div>
           <ProgressBar value={linked} max={TOTAL_SYSTEMS} />
@@ -53,7 +53,7 @@ export default async function MetadataPage() {
               <th>Prioridad</th>
               <th>Motor de BD</th>
               <th>Esquema</th>
-              <th>KPIs / variables</th>
+              <th>Indicadores / variables</th>
               <th>Variables mapeadas</th>
             </tr>
           </thead>
@@ -70,7 +70,7 @@ export default async function MetadataPage() {
                   )}{" "}
                   {s.officialName ?? s.commonName}
                 </td>
-                <td>{vars ? <Badge tone="blue">Habilitado</Badge> : <Badge>Sin KPI vinculado</Badge>}</td>
+                <td>{vars ? <Badge tone="blue">Habilitado</Badge> : <Badge>Sin indicador vinculado</Badge>}</td>
                 <td>{labelOf(DB_ENGINES, s.dbEngine)}</td>
                 <td>
                   {s.phase2SchemaUploaded ? <Badge tone="green">{s._count.rawSchema.toLocaleString("es")} columnas</Badge> : vars ? <Badge tone="amber">Pendiente</Badge> : "—"}

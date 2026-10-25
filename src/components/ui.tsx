@@ -119,7 +119,7 @@ export function Section({ title, description, children }: { title: string; descr
 export function LockedForms() {
   return (
     <Notice tone="amber" title="Portal en inicialización (Fase 0)">
-      El administrador del proyecto aún no confirmó el catálogo base de los 22 sistemas ni la asignación de SPOC. Los
+      El administrador del proyecto aún no confirmó el catálogo base de los 22 sistemas ni la asignación de responsables. Los
       formularios se habilitarán en cuanto lo haga.
     </Notice>
   );

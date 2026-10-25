@@ -105,7 +105,7 @@ export async function saveConnectivity(
     revalidatePath("/", "layout");
     if (complete && !isComplete)
       return { ok: false, error: "Se guardó como borrador, pero faltan campos obligatorios.", fieldErrors: completeErrors };
-    return { ok: true, message: status === "COMPLETED" ? "Checklist completado." : "Borrador guardado.", data: { status } };
+    return { ok: true, message: status === "COMPLETED" ? "Lista de verificación completada." : "Borrador guardado.", data: { status } };
   } catch (err) {
     return fail(err);
   }

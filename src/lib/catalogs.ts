@@ -49,7 +49,7 @@ export const ACTIVE_USERS_RANGES = [
 export const ACTIVE_USERS_RANGE_VALUES = values(ACTIVE_USERS_RANGES);
 
 export const KPI_CRITICALITIES = [
-  ["ALTA", "Alta — fuente primaria para KPIs estratégicos inmediatos (Oleada 1)"],
+  ["ALTA", "Alta — fuente primaria para indicadores estratégicos inmediatos (Oleada 1)"],
   ["MEDIA", "Media — fuente táctica o secundaria (Oleada 2)"],
   ["BAJA", "Baja — consulta histórica o baja prioridad (Oleada 3)"],
 ] as const;
@@ -80,7 +80,7 @@ export const ACCESS_SHORT: Record<string, string> = {
   DB_ONLY: "Solo BD",
   API_ONLY: "Solo API",
   RESTRICTED_VENDOR: "Restringido proveedor",
-  MANUAL_EXPORT: "Export. manual",
+  MANUAL_EXPORT: "Exportación manual",
 };
 
 export const EXTRA_FEE_OPTIONS = [
@@ -213,8 +213,8 @@ export const KPI_STATUSES = [
 ] as const;
 
 export const ROLES = [
-  ["ADMIN", "Admin / Consultor BI"],
-  ["BUSINESS", "Líder funcional / Key User"],
+  ["ADMIN", "Administrador / Consultor BI"],
+  ["BUSINESS", "Líder funcional / Usuario clave"],
   ["TECH", "Custodio técnico / DBA / Infraestructura"],
 ] as const;
 

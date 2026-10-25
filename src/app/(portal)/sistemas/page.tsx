@@ -59,7 +59,7 @@ export default async function SystemsPage({ searchParams }: { searchParams: Prom
               <th>Dominio</th>
               <th>Criticidad</th>
               <th>Acceso</th>
-              <th>SPOC funcional / técnico</th>
+              <th>Responsable funcional / técnico</th>
               <th>Estado</th>
               <th>Oleada</th>
             </tr>

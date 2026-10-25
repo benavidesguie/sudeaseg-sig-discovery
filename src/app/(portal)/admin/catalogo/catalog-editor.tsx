@@ -81,7 +81,7 @@ export function CatalogEditor({
             <span className="font-medium text-amber-700">● Catálogo pendiente de confirmación</span>
           )}
           <div className="text-slate-500">
-            {ready} de {rows.length} sistemas con nombre común y ambos SPOC asignados.
+            {ready} de {rows.length} sistemas con nombre común y ambos responsables asignados.
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -102,7 +102,7 @@ export function CatalogEditor({
 
       {noUsers && (
         <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-          Para asignar SPOC necesita usuarios con rol de negocio y técnico.{" "}
+          Para asignar responsables necesita usuarios con rol de negocio y técnico.{" "}
           <Link href="/admin/usuarios" className="link">
             Crear usuarios
           </Link>
@@ -117,8 +117,8 @@ export function CatalogEditor({
             <tr>
               <th className="w-24">Código</th>
               <th>Nombre común acordado</th>
-              <th>SPOC funcional (negocio)</th>
-              <th>SPOC técnico (TI)</th>
+              <th>Responsable funcional (negocio)</th>
+              <th>Responsable técnico (TI)</th>
             </tr>
           </thead>
           <tbody>

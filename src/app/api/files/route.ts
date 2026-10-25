@@ -47,7 +47,7 @@ export async function POST(req: Request) {
   } else {
     kpiId = String(form.get("kpiId") ?? "");
     const kpi = /^[0-9a-f-]{36}$/i.test(kpiId) ? await prisma.kpiCatalog.findUnique({ where: { id: kpiId } }) : null;
-    if (!kpi) return bad("Guarde el KPI como borrador antes de adjuntar evidencias.", 404);
+    if (!kpi) return bad("Guarde el indicador como borrador antes de adjuntar evidencias.", 404);
     kpiCode = kpi.kpiCode;
   }
 

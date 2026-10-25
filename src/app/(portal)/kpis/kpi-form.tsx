@@ -88,7 +88,7 @@ export function KpiForm({
 
   const remove = () =>
     start(async () => {
-      if (!kpiId || !window.confirm("¿Eliminar este KPI con sus variables y evidencias? Esta acción no se puede deshacer.")) return;
+      if (!kpiId || !window.confirm("¿Eliminar este indicador con sus variables y evidencias? Esta acción no se puede deshacer.")) return;
       const res = await deleteKpi(kpiId);
       if (res.ok) router.push("/kpis");
       else setMsg({ ok: false, text: res.error });
@@ -97,7 +97,7 @@ export function KpiForm({
   const usedSystems = Array.from(new Set(data.variables.map((v) => v.sourceSystemCode).filter(Boolean)));
   const evidenceDisabledReason = locked
     ? "Bloqueado hasta confirmar el catálogo (Fase 0)."
-    : "Guarde el KPI como borrador para poder adjuntar evidencias.";
+    : "Guarde el indicador como borrador para poder adjuntar evidencias.";
 
   return (
     <div className="space-y-5">
@@ -123,7 +123,7 @@ export function KpiForm({
 
       <Section
         title="Bloque C · Mapeo de variables con sistemas fuente"
-        description="Agregue una fila por cada variable de la fórmula. El ID de transacción de ejemplo permite a TI rastrear el dato en la base de datos (Follow the Data)."
+        description="Agregue una fila por cada variable de la fórmula. El ID de transacción de ejemplo permite a TI rastrear el dato en la base de datos (seguir el dato)."
       >
         {err("variables") && <p className="mb-3 text-sm text-red-600">{err("variables")}</p>}
         <div className="space-y-3">

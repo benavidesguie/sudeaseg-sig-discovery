@@ -35,7 +35,7 @@ export default async function ExportPage() {
         <div className="card p-6">
           <h2 className="text-base font-semibold">2 · Matriz de trazabilidad origen-destino</h2>
           <p className="mt-1 text-sm text-slate-600">
-            Cruce completo KPI → Variable → Sistema (SIS-XX) → Tabla física → Columna física → Regla de negocio. {kpis} KPIs, {variables} variables.
+            Cruce completo Indicador → Variable → Sistema (SIS-XX) → Tabla física → Columna física → Regla de negocio. {kpis} indicadores, {variables} variables.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <a className="btn-primary" href="/api/export/trazabilidad?format=xlsx">Excel (.xlsx)</a>

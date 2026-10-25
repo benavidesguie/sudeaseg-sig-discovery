@@ -39,7 +39,7 @@ export default async function SystemPage({ params }: { params: Promise<{ code: s
             <WaveBadge wave={system.waveNumber} />
             {system.vendorRiskAlert && <RiskBadge />}
             <span className="text-slate-500">
-              SPOC funcional: {system.spocBusiness?.name ?? "sin asignar"} · SPOC técnico: {system.spocTech?.name ?? "sin asignar"}
+              Responsable funcional: {system.spocBusiness?.name ?? "sin asignar"} · Responsable técnico: {system.spocTech?.name ?? "sin asignar"}
             </span>
           </span>
         }

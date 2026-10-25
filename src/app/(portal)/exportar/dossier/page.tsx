@@ -22,7 +22,7 @@ export default async function DossierPrintPage() {
         <PrintButton />
       </div>
       <h1 className="text-2xl font-semibold">Dossier técnico consolidado</h1>
-      <p className="text-slate-500">Relevamiento de 22 sistemas · generado {new Date(d.generated_at).toLocaleString("es")}</p>
+      <p className="text-slate-500">Inventario de 22 sistemas · generado {new Date(d.generated_at).toLocaleString("es")}</p>
 
       <table className="data-table mt-4 max-w-xl">
         <tbody>
@@ -57,7 +57,7 @@ export default async function DossierPrintPage() {
       {d.systems.map((s) => {
         const v = (s.ownership.vendor_info ?? {}) as Record<string, unknown>;
         const rows: [string, string][] = [
-          ["SPOC funcional / técnico", `${s.spoc_business?.name ?? "—"} / ${s.spoc_tech?.name ?? "—"}`],
+          ["Responsable funcional / técnico", `${s.spoc_business?.name ?? "—"} / ${s.spoc_tech?.name ?? "—"}`],
           ["Estado Fase 1 / Esquema / Fase 3", `${C.labelOf(C.PHASE_STATUSES, s.status.phase1)} / ${s.status.phase2_schema_uploaded ? "Recibido" : "Pendiente"} / ${C.labelOf(C.PHASE_STATUSES, s.status.phase3)}`],
           ["Oleada sugerida", s.wave.label ?? "Sin clasificar"],
           ["Alias / versión", `${s.identification.internal_alias ?? "—"} / ${s.identification.version ?? "—"}`],
@@ -79,7 +79,7 @@ export default async function DossierPrintPage() {
           ["Carga incremental / volumen", `${yesNo(s.connectivity.supports_incremental_load)} / ${C.labelOf(C.VOLUME_ESTIMATES, s.connectivity.historical_volume_estimate)}`],
           ["Ventana de extracción", s.connectivity.extraction_window ?? "—"],
           ["Metadatos", `${s.metadata.tables} tablas · ${s.metadata.columns} columnas`],
-          ["KPIs que lo usan", s.kpi_usage.kpis.join(", ") || "—"],
+          ["Indicadores que lo usan", s.kpi_usage.kpis.join(", ") || "—"],
           ["Variables mapeadas", `${s.kpi_usage.variables_mapped} / ${s.kpi_usage.variables}`],
         ];
         return (

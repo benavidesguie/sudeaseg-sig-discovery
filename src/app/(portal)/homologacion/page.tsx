@@ -29,7 +29,7 @@ export default async function MasterDataPage({ searchParams }: { searchParams: P
       <PageHeader
         phase="Transversal · Módulo 5"
         title="Homologación de catálogos maestros"
-        subtitle="Resuelva las discrepancias de códigos maestros entre sistemas antes de construir el Data Warehouse (capa plata): defina el código canónico y su equivalencia en cada sistema."
+        subtitle="Resuelva las discrepancias de códigos maestros entre sistemas antes de construir el almacén de datos (capa plata): defina el código canónico y su equivalencia en cada sistema."
       />
       {locked && (
         <div className="mb-4">

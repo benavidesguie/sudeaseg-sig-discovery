@@ -113,7 +113,7 @@ const md = (s: string | null | undefined) => (s ? s.replace(/\|/g, "\\|").replac
 
 export function dossierToMarkdown(d: Dossier) {
   const out: string[] = [];
-  out.push("# Dossier técnico consolidado · Relevamiento de 22 sistemas", "");
+  out.push("# Dossier técnico consolidado · Inventario de 22 sistemas", "");
   out.push(`Generado: ${new Date(d.generated_at).toLocaleString("es")}`, "");
   out.push("## Resumen", "");
   out.push("| Indicador | Valor |", "|---|---|");
@@ -141,14 +141,14 @@ export function dossierToMarkdown(d: Dossier) {
     const v = (s.ownership.vendor_info ?? {}) as Record<string, unknown>;
     const rows: [string, string][] = [
       ["Nombre común (catálogo)", md(s.common_name)],
-      ["SPOC funcional / técnico", `${s.spoc_business?.name ?? "—"} / ${s.spoc_tech?.name ?? "—"}`],
+      ["Responsable funcional / técnico", `${s.spoc_business?.name ?? "—"} / ${s.spoc_tech?.name ?? "—"}`],
       ["Estado Fase 1 / Esquema / Fase 3", `${C.labelOf(C.PHASE_STATUSES, s.status.phase1)} / ${s.status.phase2_schema_uploaded ? "Recibido" : "Pendiente"} / ${C.labelOf(C.PHASE_STATUSES, s.status.phase3)}`],
       ["Oleada sugerida", s.wave.label ?? "Sin clasificar"],
       ["Alias interno / versión", `${md(s.identification.internal_alias)} / ${md(s.identification.version)}`],
       ["Dominio de negocio", C.labelOf(C.BUSINESS_DOMAINS, s.identification.business_domain)],
       ["Departamentos usuarios", s.identification.user_departments.join(", ") || "—"],
       ["Usuarios activos", C.labelOf(C.ACTIVE_USERS_RANGES, s.identification.active_users_range)],
-      ["Criticidad para KPIs", C.CRITICALITY_SHORT[s.identification.kpi_criticality ?? ""] ?? "—"],
+      ["Criticidad para indicadores", C.CRITICALITY_SHORT[s.identification.kpi_criticality ?? ""] ?? "—"],
       ["Dueño funcional", md(contact(s.ownership.business_owner))],
       ["Custodio técnico", md(contact(s.ownership.tech_custodian))],
       ["Tipo de solución", C.labelOf(C.SOLUTION_TYPES, s.ownership.solution_type)],
@@ -172,7 +172,7 @@ export function dossierToMarkdown(d: Dossier) {
       ["Volumen histórico", C.labelOf(C.VOLUME_ESTIMATES, s.connectivity.historical_volume_estimate)],
       ["Ventana de extracción", md(s.connectivity.extraction_window)],
       ["Metadatos recibidos", `${s.metadata.tables} tablas · ${s.metadata.columns} columnas`],
-      ["KPIs que lo usan", s.kpi_usage.kpis.join(", ") || "—"],
+      ["Indicadores que lo usan", s.kpi_usage.kpis.join(", ") || "—"],
       ["Variables mapeadas", `${s.kpi_usage.variables_mapped} / ${s.kpi_usage.variables}`],
     );
     out.push("| Campo | Valor |", "|---|---|", ...rows.map(([k, val]) => `| ${k} | ${val} |`), "");
@@ -185,10 +185,10 @@ export function dossierToMarkdown(d: Dossier) {
 // ---------------------------------------------------------------------------
 
 export const TRACE_COLUMNS = [
-  ["kpi_code", "Código KPI"],
-  ["kpi_name", "Nombre KPI"],
+  ["kpi_code", "Código del indicador"],
+  ["kpi_name", "Nombre del indicador"],
   ["business_domain", "Dominio"],
-  ["kpi_status", "Estado KPI"],
+  ["kpi_status", "Estado del indicador"],
   ["calculation_formula", "Fórmula"],
   ["business_rules", "Reglas de negocio"],
   ["var_name", "Variable"],
@@ -270,7 +270,7 @@ export function rowsToCsv(rows: TraceRow[]) {
 export async function rowsToXlsx(rows: TraceRow[]) {
   const ExcelJS = (await import("exceljs")).default;
   const wb = new ExcelJS.Workbook();
-  wb.creator = "Portal de Relevamiento";
+  wb.creator = "Inventario de Sistemas";
   const ws = wb.addWorksheet("Trazabilidad", { views: [{ state: "frozen", ySplit: 1 }] });
   ws.columns = TRACE_COLUMNS.map(([key, header]) => ({
     key,

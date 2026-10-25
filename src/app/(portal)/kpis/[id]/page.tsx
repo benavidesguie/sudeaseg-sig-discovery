@@ -23,7 +23,7 @@ export default async function KpiPage({ params }: { params: Promise<{ id: string
   return (
     <>
       <PageHeader
-        back={{ href: "/kpis", label: "KPI Canvas" }}
+        back={{ href: "/kpis", label: "Indicadores de gestión" }}
         phase={`Fase 2A · Módulo 2 · ${kpi.kpiCode}`}
         title={kpi.kpiName}
         subtitle={<StatusBadge status={kpi.status} />}

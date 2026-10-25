@@ -29,7 +29,7 @@ export async function POST(req: Request, { params }: Ctx) {
   const system = await prisma.systemInventory.findUnique({ where: { systemCode: code } });
   if (!system) return bad("Sistema no encontrado.", 404);
   if (!(await isSystemKpiLinked(code)))
-    return bad("Este sistema no está vinculado a ningún KPI. Según la regla KPI-Driven Discovery, la carga técnica aún no está habilitada.", 409);
+    return bad("Este sistema no está vinculado a ningún indicador. Según la regla “primero los indicadores”, la carga técnica aún no está habilitada.", 409);
 
   if (Number(req.headers.get("content-length") ?? 0) > MAX_UPLOAD_BYTES + 1024 * 1024)
     return bad(`El archivo supera el máximo de ${MAX_UPLOAD_BYTES / 1024 / 1024} MB.`, 413);
