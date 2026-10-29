@@ -113,7 +113,7 @@ const md = (s: string | null | undefined) => (s ? s.replace(/\|/g, "\\|").replac
 
 export function dossierToMarkdown(d: Dossier) {
   const out: string[] = [];
-  out.push("# Dossier técnico consolidado · Inventario de 22 sistemas", "");
+  out.push(`# Dossier técnico consolidado · Inventario de ${C.TOTAL_SYSTEMS} sistemas`, "");
   out.push(`Generado: ${new Date(d.generated_at).toLocaleString("es")}`, "");
   out.push("## Resumen", "");
   out.push("| Indicador | Valor |", "|---|---|");

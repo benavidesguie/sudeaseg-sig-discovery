@@ -12,11 +12,13 @@ export function labelOf(c: Catalog, value: string | null | undefined): string {
   return c.find(([v]) => v === value)?.[1] ?? value;
 }
 
-export const TOTAL_SYSTEMS = 22;
+export const TOTAL_SYSTEMS = 30;
 export const SYSTEM_CODES = Array.from(
   { length: TOTAL_SYSTEMS },
   (_, i) => `SIS-${String(i + 1).padStart(2, "0")}`,
 );
+/** Rango legible del catálogo, p. ej. "SIS-01..SIS-30". */
+export const SYSTEM_RANGE = `${SYSTEM_CODES[0]}..${SYSTEM_CODES[TOTAL_SYSTEMS - 1]}`;
 
 export const BUSINESS_DOMAINS = [
   ["FINANZAS", "Finanzas"],

@@ -25,7 +25,7 @@ export default async function SystemsPage({ searchParams }: { searchParams: Prom
         title="Ficha de inventario de sistemas"
         subtitle={
           scope === "all"
-            ? "Censo de los 22 sistemas. El dueño funcional completa la sección de negocio y el custodio técnico la sección técnica."
+            ? `Censo de los ${TOTAL_SYSTEMS} sistemas. El dueño funcional completa la sección de negocio y el custodio técnico la sección técnica.`
             : scope === "business"
               ? "Usted completa la sección funcional (Bloque A y dueño funcional). La sección técnica la completa TI."
               : "Usted completa la sección técnica (custodio, tipo de solución, acceso y plataforma). La sección funcional la completa negocio."

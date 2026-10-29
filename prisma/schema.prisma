@@ -47,7 +47,7 @@ model ProjectSettings {
   @@map("project_settings")
 }
 
-// 1. Tabla maestra de los 22 sistemas (Fases 0, 1 y 3)
+// 1. Tabla maestra de los sistemas (TOTAL_SYSTEMS en src/lib/catalogs.ts) (Fases 0, 1 y 3)
 model SystemInventory {
   id         String @id @default(uuid()) @db.Uuid
   systemCode String @unique @map("system_code") @db.VarChar(10)

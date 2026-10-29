@@ -22,7 +22,7 @@ export default async function DossierPrintPage() {
         <PrintButton />
       </div>
       <h1 className="text-2xl font-semibold">Dossier técnico consolidado</h1>
-      <p className="text-slate-500">Inventario de 22 sistemas · generado {new Date(d.generated_at).toLocaleString("es")}</p>
+      <p className="text-slate-500">Inventario de {C.TOTAL_SYSTEMS} sistemas · generado {new Date(d.generated_at).toLocaleString("es")}</p>
 
       <table className="data-table mt-4 max-w-xl">
         <tbody>

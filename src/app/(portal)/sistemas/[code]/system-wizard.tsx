@@ -156,7 +156,7 @@ export function SystemWizard({
       <div className="card p-5 sm:p-6">
         {step === 0 && (
           <div className="grid gap-4 sm:grid-cols-2">
-            <TextInput label="Código del sistema" value={systemCode} disabled onChange={() => {}} hint="Selector oficial SIS-01..SIS-22 (clave única)." />
+            <TextInput label="Código del sistema" value={systemCode} disabled onChange={() => {}} hint={`Selector oficial ${C.SYSTEM_RANGE} (clave única).`} />
             <TextInput label="Nombre comercial u oficial" required disabled={!editable("officialName")} value={data.officialName} error={err("officialName")} onChange={(v) => set("officialName", v)} />
             <TextInput label="Alias interno" disabled={!editable("internalAlias")} value={data.internalAlias} hint="Cómo lo conoce el personal." onChange={(v) => set("internalAlias", v)} />
             <TextInput label="Versión actual" disabled={!editable("version")} value={data.version} onChange={(v) => set("version", v)} />

@@ -133,5 +133,5 @@ test("homologación: códigos canónicos únicos y obligatorios", () => {
   assert.ok(errs["2.canonicalCode"]);
   assert.ok(errs["2.canonicalName"]);
   const unknown = validateMasterRows([{ canonicalCode: "X", canonicalName: "Y", systemEquivalences: { "SIS-77": "1" } }]);
-  assert.ok(Object.keys(unknown).length > 0, "rechaza códigos de sistema fuera de SIS-01..22");
+  assert.ok(Object.keys(unknown).length > 0, "rechaza códigos de sistema fuera del catálogo");
 });

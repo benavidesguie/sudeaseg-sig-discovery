@@ -1,6 +1,6 @@
-# Portal de Relevamiento · 22 Sistemas e Indicadores de Gestión (KPIs)
+# Inventario de Sistemas · Sistemas e indicadores de gestión
 
-Aplicación web para capturar de forma asincrónica, guiada y validada la información de las Fases 0 a 3 del *Discovery & Assessment*: inventario de los 22 sistemas (`SIS-01`..`SIS-22`), KPI Canvas, metadatos técnicos, conectividad y homologación de maestros. Al final genera el dossier técnico y la matriz de trazabilidad.
+Aplicación web para capturar de forma asincrónica, guiada y validada la información de las Fases 0 a 3 del *Discovery & Assessment*: inventario de los 30 sistemas (`SIS-01`..`SIS-30`), KPI Canvas, metadatos técnicos, conectividad y homologación de maestros. Al final genera el dossier técnico y la matriz de trazabilidad.
 
 **Stack:** Next.js 15 (App Router, Server Actions) · TypeScript · Prisma 6 · PostgreSQL 16 · Tailwind CSS 4.
 
@@ -20,7 +20,7 @@ export POSTGRES_PASSWORD="otra-clave-segura"
 docker compose up -d --build
 ```
 
-El portal queda en `http://localhost:3000`. Al arrancar aplica las migraciones y crea el admin y los 22 códigos del catálogo (sin sobrescribir datos existentes). Los adjuntos se guardan en el volumen `uploads`.
+El portal queda en `http://localhost:3000`. Al arrancar aplica las migraciones y crea el admin y los códigos del catálogo (sin sobrescribir datos existentes). Los adjuntos se guardan en el volumen `uploads`.
 
 > La cookie de sesión es `Secure` en producción, así que el portal debe servirse por HTTPS (por ejemplo, detrás de un proxy inverso). Solo para pruebas en una red interna sin TLS se puede usar `INSECURE_COOKIES=1`.
 
@@ -32,7 +32,7 @@ Requiere Node.js 22 y PostgreSQL 14 o superior.
 cp .env.example .env          # ajuste DATABASE_URL, AUTH_SECRET y el usuario admin
 npm install
 npx prisma migrate deploy
-npm run db:seed               # admin + catálogo SIS-01..SIS-22
+npm run db:seed               # admin + catálogo SIS-01..SIS-30
 npm run db:seed:demo          # (opcional) datos ficticios de demostración
 npm run dev                   # http://localhost:3000
 ```
@@ -51,7 +51,7 @@ Los datos de demostración crean `admin@demo.local`, `negocio@demo.local` y `ti@
 
 ## Flujo de uso
 
-1. **Fase 0 · Catálogo semilla** (Admin → *Catálogo semilla*): cree usuarios, cargue el nombre común de los 22 sistemas y asigne el SPOC funcional y técnico de cada uno. Al **confirmar el catálogo** se habilitan los formularios para el resto de los roles; antes de eso los ven en solo lectura.
+1. **Fase 0 · Catálogo semilla** (Admin → *Catálogo semilla*): cree usuarios, cargue el nombre común de los 30 sistemas y asigne el responsable funcional y técnico de cada uno. Al **confirmar el catálogo** se habilitan los formularios para el resto de los roles; antes de eso los ven en solo lectura. Para ampliar el inventario, cambie `TOTAL_SYSTEMS` en `src/lib/catalogs.ts` y reconstruya: al arrancar se crean los códigos nuevos sin tocar los existentes.
 2. **Módulo 1 · Ficha de sistema** (Fase 1): wizard de 3 bloques con borrador y completado. Negocio edita el Bloque A y el dueño funcional; TI edita el custodio, tipo de solución, nivel de acceso, proveedor y el Bloque C. Si el acceso es `RESTRICTED_VENDOR`, se exige el bloque del proveedor y el sistema aparece con **alerta roja** en el dashboard.
 3. **Módulo 2 · KPI Canvas** (Fase 2A): definición, fórmula, reglas, dimensiones, variables vinculadas al selector oficial `SIS-XX` con ID de transacción de ejemplo, y evidencias (Excel obligatorio si el cálculo es un cruce manual en Excel, más las capturas de transacción y de reporte). El código `KPI-<DOM>-NN` se asigna automáticamente.
 4. **Módulo 3 · Metadatos** (Fase 2B): solo se habilita para sistemas vinculados a por lo menos un KPI (*KPI-Driven Discovery*). Muestra el script de extracción según el motor declarado en el Módulo 1 (PostgreSQL, SQL Server, MySQL, Oracle, MongoDB, archivos planos/Excel, o una plantilla para SaaS). TI sube el CSV/JSON resultante, usa el buscador de tablas y columnas, y en la mesa *Follow the Data* vincula cada variable con su tabla, columna, llave primaria y campo incremental. El portal valida que las tablas y columnas existan en el esquema cargado.

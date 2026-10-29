@@ -77,7 +77,7 @@ Si deja el dominio vacío, el script usa la IP pública con [sslip.io](https://s
 
 1. Entre con el administrador.
 2. Vaya a **Usuarios y roles** y cree los usuarios de negocio y de TI.
-3. Vaya a **Catálogo semilla**, cargue los 22 sistemas con sus SPOC y presione **Confirmar catálogo**.
+3. Vaya a **Catálogo semilla**, cargue los 30 sistemas con sus responsables y presione **Confirmar catálogo**.
 4. Comparta la dirección y las credenciales con cada usuario por un canal seguro.
 
 No cargue los datos de demostración en este servidor.

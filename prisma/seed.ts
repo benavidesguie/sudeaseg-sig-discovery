@@ -1,4 +1,4 @@
-// Seed inicial: crea el usuario administrador y los 22 códigos del catálogo semilla (SIS-01..SIS-22).
+// Seed inicial: crea el usuario administrador y los códigos del catálogo semilla (SIS-01..SIS-NN, según TOTAL_SYSTEMS).
 // Es idempotente: no sobrescribe datos existentes.
 import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";

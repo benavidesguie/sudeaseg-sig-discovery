@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/server/db";
 import { requireModule } from "@/lib/server/auth";
 import { getProjectSettings } from "@/lib/server/project";
-import { SYSTEM_CODES } from "@/lib/catalogs";
+import { SYSTEM_CODES, SYSTEM_RANGE, TOTAL_SYSTEMS } from "@/lib/catalogs";
 import { PageHeader } from "@/components/ui";
 import { CatalogEditor } from "./catalog-editor";
 
@@ -28,8 +28,8 @@ export default async function CatalogPage() {
     <>
       <PageHeader
         phase="Fase 0 · Inicialización"
-        title="Catálogo base de los 22 sistemas"
-        subtitle="Cargue o confirme el nombre común acordado de cada sistema (SIS-01 a SIS-22) y asigne su Single Point of Contact funcional y técnico. Hasta que confirme el catálogo, los formularios permanecen bloqueados para los usuarios finales."
+        title={`Catálogo base de los ${TOTAL_SYSTEMS} sistemas`}
+        subtitle={`Cargue o confirme el nombre común acordado de cada sistema (${SYSTEM_RANGE}) y asigne su responsable funcional y técnico. Hasta que confirme el catálogo, los formularios permanecen bloqueados para los usuarios finales.`}
       />
       <CatalogEditor
         initialRows={rows}

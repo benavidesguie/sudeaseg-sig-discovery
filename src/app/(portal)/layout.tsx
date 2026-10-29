@@ -1,7 +1,7 @@
 import { requireUser } from "@/lib/server/auth";
 import { isCatalogConfirmed } from "@/lib/server/project";
 import { canAccess } from "@/lib/permissions";
-import { labelOf, ROLES } from "@/lib/catalogs";
+import { labelOf, ROLES, TOTAL_SYSTEMS } from "@/lib/catalogs";
 import { logout } from "@/app/actions/auth";
 import { Nav, type NavGroup } from "@/components/nav";
 
@@ -60,7 +60,7 @@ export default async function PortalLayout({ children }: { children: React.React
           <div className="no-print border-b border-amber-200 bg-amber-50 px-6 py-2 text-sm text-amber-900">
             <strong>Fase 0 pendiente:</strong>{" "}
             {user.role === "ADMIN"
-              ? "confirme el catálogo base de los 22 sistemas y sus responsables para habilitar los formularios al resto de los usuarios."
+              ? `confirme el catálogo base de los ${TOTAL_SYSTEMS} sistemas y sus responsables para habilitar los formularios al resto de los usuarios.`
               : "el administrador aún no confirmó el catálogo de sistemas; los formularios están en solo lectura."}
           </div>
         )}

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/server/db";
 import { requireModule } from "@/lib/server/auth";
 import { formsLockedFor } from "@/lib/server/project";
-import { BUSINESS_DOMAINS, FREQUENCIES, labelOf } from "@/lib/catalogs";
+import { BUSINESS_DOMAINS, FREQUENCIES, SYSTEM_RANGE, labelOf } from "@/lib/catalogs";
 import { hasCompleteEvidence, isVariableMapped } from "@/lib/validation";
 import { Badge, EmptyState, PageHeader, StatusBadge } from "@/components/ui";
 
@@ -23,7 +23,7 @@ export default async function KpisPage({ searchParams }: { searchParams: Promise
       <PageHeader
         phase="Fase 2A · Módulo 2"
         title="Indicadores de gestión · Ficha y matriz"
-        subtitle="Registre cada indicador, su fórmula y reglas, y vincule cada variable con el sistema fuente (SIS-01..22) y una transacción real de ejemplo para que TI pueda seguir el dato."
+        subtitle={`Registre cada indicador, su fórmula y reglas, y vincule cada variable con el sistema fuente (${SYSTEM_RANGE}) y una transacción real de ejemplo para que TI pueda seguir el dato.`}
         actions={
           !locked && (
             <Link href="/kpis/nuevo" className="btn-primary">

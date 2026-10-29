@@ -7,7 +7,7 @@ import { prisma } from "@/lib/server/db";
 import { assertModule } from "@/lib/server/auth";
 import { fail } from "@/lib/server/fail";
 import { logActivity } from "@/lib/server/activity";
-import { SYSTEM_CODES, TOTAL_SYSTEMS } from "@/lib/catalogs";
+import { SYSTEM_CODES, SYSTEM_RANGE, TOTAL_SYSTEMS } from "@/lib/catalogs";
 import type { ActionResult } from "@/lib/action-result";
 
 // ---------------------------------------------------------------------------
@@ -61,7 +61,7 @@ export async function saveCatalog(rows: CatalogRow[]): Promise<ActionResult> {
         }),
       ),
     );
-    await logActivity(user.id, "CATALOG_SAVED", "CATALOG", "SIS-01..22");
+    await logActivity(user.id, "CATALOG_SAVED", "CATALOG", SYSTEM_RANGE);
     revalidatePath("/", "layout");
     return { ok: true, message: "Catálogo guardado." };
   } catch (err) {
@@ -87,7 +87,7 @@ export async function confirmCatalog(): Promise<ActionResult> {
       update: { catalogConfirmedAt: new Date(), catalogConfirmedBy: user.name },
       create: { id: 1, catalogConfirmedAt: new Date(), catalogConfirmedBy: user.name },
     });
-    await logActivity(user.id, "CATALOG_CONFIRMED", "CATALOG", "SIS-01..22");
+    await logActivity(user.id, "CATALOG_CONFIRMED", "CATALOG", SYSTEM_RANGE);
     revalidatePath("/", "layout");
     return { ok: true, message: "Catálogo confirmado. Los formularios quedan habilitados para todos los roles." };
   } catch (err) {
@@ -103,7 +103,7 @@ export async function reopenCatalog(): Promise<ActionResult> {
       update: { catalogConfirmedAt: null, catalogConfirmedBy: null },
       create: { id: 1 },
     });
-    await logActivity(user.id, "CATALOG_REOPENED", "CATALOG", "SIS-01..22");
+    await logActivity(user.id, "CATALOG_REOPENED", "CATALOG", SYSTEM_RANGE);
     revalidatePath("/", "layout");
     return { ok: true, message: "Catálogo reabierto. Los formularios quedan bloqueados para usuarios finales." };
   } catch (err) {

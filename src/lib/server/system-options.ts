@@ -1,7 +1,7 @@
 import "server-only";
 import { prisma } from "./db";
 
-// Selector oficial SIS-01..SIS-22: ningún formulario usa texto libre para referirse a un sistema.
+// Selector oficial SIS-01..SIS-NN (TOTAL_SYSTEMS): ningún formulario usa texto libre para referirse a un sistema.
 export async function systemOptions(): Promise<[string, string][]> {
   const systems = await prisma.systemInventory.findMany({
     orderBy: { systemCode: "asc" },

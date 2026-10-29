@@ -103,7 +103,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Pr
     <>
       <PageHeader
         title="Tablero de avance"
-        subtitle="Vista ejecutiva del relevamiento de los 22 sistemas y los indicadores de gestión. Se actualiza en tiempo real con cada carga."
+        subtitle={`Vista ejecutiva del relevamiento de los ${TOTAL_SYSTEMS} sistemas y los indicadores de gestión. Se actualiza en tiempo real con cada carga.`}
       />
       {denied && (
         <div className="mb-4">

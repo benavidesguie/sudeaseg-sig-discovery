@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { TOTAL_SYSTEMS } from "@/lib/catalogs";
 
 export function PageHeader({
   title,
@@ -119,7 +120,7 @@ export function Section({ title, description, children }: { title: string; descr
 export function LockedForms() {
   return (
     <Notice tone="amber" title="Portal en inicialización (Fase 0)">
-      El administrador del proyecto aún no confirmó el catálogo base de los 22 sistemas ni la asignación de responsables. Los
+      El administrador del proyecto aún no confirmó el catálogo base de los {TOTAL_SYSTEMS} sistemas ni la asignación de responsables. Los
       formularios se habilitarán en cuanto lo haga.
     </Notice>
   );
