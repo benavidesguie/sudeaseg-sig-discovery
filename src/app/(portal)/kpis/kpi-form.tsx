@@ -21,6 +21,13 @@ const LABELS: Record<string, string> = {
   businessRules: "Reglas de negocio",
   dimensions: "Dimensiones",
   currentCalculationMethod: "Método de cálculo actual",
+  responsibleArea: "Área responsable",
+  indicatorType: "Tipo de indicador",
+  indicatorLevel: "Nivel",
+  targetValue: "Meta",
+  dataSource: "Fuente de datos",
+  strategicObjectives: "Objetivos estratégicos",
+  observations: "Observaciones",
   variables: "Variables",
   "evidence.excel": "Excel actual",
   "evidence.transaction": "Captura de transacción",
@@ -105,11 +112,27 @@ export function KpiForm({
         <div className="grid gap-4 sm:grid-cols-2">
           <TextInput label="Código" value={kpiCode ?? "Se asigna al guardar (KPI-<DOM>-NN)"} disabled onChange={() => {}} />
           <TextInput label="Nombre del indicador" required disabled={locked} value={data.kpiName} error={err("kpiName")} onChange={(v) => set("kpiName", v)} />
-          <Select label="Dominio de negocio" required disabled={locked} options={C.BUSINESS_DOMAINS} value={data.businessDomain} error={err("businessDomain")} onChange={(v) => set("businessDomain", v)} />
+          <Select label="Dominio" required disabled={locked} options={C.KPI_DOMAINS} value={data.businessDomain} error={err("businessDomain")} onChange={(v) => set("businessDomain", v)} />
           <Select label="Unidad de medida" required disabled={locked} options={C.UNITS_OF_MEASURE} value={data.unitOfMeasure} error={err("unitOfMeasure")} onChange={(v) => set("unitOfMeasure", v)} />
           <TextArea className="sm:col-span-2" label="¿Qué decisión permite tomar este indicador?" required disabled={locked} value={data.kpiObjective} error={err("kpiObjective")} onChange={(v) => set("kpiObjective", v)} />
           <Select label="Frecuencia" required disabled={locked} options={C.FREQUENCIES} value={data.frequency} error={err("frequency")} onChange={(v) => set("frequency", v)} />
           <RadioGroup label="Dirección de tendencia" required disabled={locked} options={C.TREND_DIRECTIONS} value={data.trendDirection} error={err("trendDirection")} onChange={(v) => set("trendDirection", v)} />
+        </div>
+      </Section>
+
+      <Section title="Catálogo institucional" description="Datos del catálogo de indicadores de gestión de la institución.">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <TextInput label="Área / dependencia responsable" required disabled={locked} value={data.responsibleArea} error={err("responsibleArea")} onChange={(v) => set("responsibleArea", v)} />
+          <TextInput label="Meta" required disabled={locked} placeholder="Ej. >= 90%" value={data.targetValue} error={err("targetValue")} onChange={(v) => set("targetValue", v)} />
+          <Select label="Nivel" disabled={locked} options={C.INDICATOR_LEVELS} value={data.indicatorLevel} error={err("indicatorLevel")} onChange={(v) => set("indicatorLevel", v)} />
+          <TextInput label="Tipo de indicador" disabled={locked} placeholder="Ej. Cuantitativo / Avance" value={data.indicatorType} error={err("indicatorType")} onChange={(v) => set("indicatorType", v)} />
+          <TextInput label="Fuente de datos" disabled={locked} placeholder="Ej. Sistema de Correspondencia" value={data.dataSource} error={err("dataSource")} onChange={(v) => set("dataSource", v)} />
+          <TextInput label="Objetivos estratégicos" disabled={locked} placeholder="Ej. 1; 2; 6" value={data.strategicObjectives} error={err("strategicObjectives")} onChange={(v) => set("strategicObjectives", v)} />
+          <label className="flex items-center gap-2 text-sm sm:col-span-2">
+            <input type="checkbox" className="accent-brand-600" disabled={locked} checked={data.inManagementPlan} onChange={(e) => set("inManagementPlan", e.target.checked)} />
+            Forma parte del Plan de Gestión 2026
+          </label>
+          <TextArea className="sm:col-span-2" label="Observaciones y pendientes" disabled={locked} placeholder="Dudas por aclarar, datos que faltan, posibles duplicados…" value={data.observations} error={err("observations")} onChange={(v) => set("observations", v)} />
         </div>
       </Section>
 
@@ -239,7 +262,7 @@ export function KpiForm({
           <div>
             {kpiId && canDelete && (
               <button type="button" className="btn-danger" disabled={pending} onClick={remove}>
-                Eliminar KPI
+                Eliminar indicador
               </button>
             )}
           </div>

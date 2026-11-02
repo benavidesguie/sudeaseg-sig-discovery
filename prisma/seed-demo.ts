@@ -96,9 +96,9 @@ async function main() {
   if ((await prisma.kpiCatalog.count()) === 0) {
     await prisma.kpiCatalog.create({
       data: {
-        kpiCode: "KPI-FIN-01",
+        kpiCode: "KPI-GIN-01",
         kpiName: "Cumplimiento de presupuesto de ventas",
-        businessDomain: "FINANZAS",
+        businessDomain: "GESTION_INTERNA",
         kpiObjective: "Decidir ajustes de metas comerciales por sucursal a mitad de mes.",
         unitOfMeasure: "PERCENTAGE",
         frequency: "MONTHLY",
@@ -118,9 +118,9 @@ async function main() {
     });
     await prisma.kpiCatalog.create({
       data: {
-        kpiCode: "KPI-COM-01",
+        kpiCode: "KPI-AUT-01",
         kpiName: "Tasa de conversión de oportunidades",
-        businessDomain: "COMERCIAL",
+        businessDomain: "AUTORIZACIONES",
         kpiObjective: "Priorizar la cartera de oportunidades y el seguimiento de vendedores.",
         unitOfMeasure: "PERCENTAGE",
         frequency: "WEEKLY",

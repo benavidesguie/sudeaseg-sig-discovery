@@ -191,6 +191,14 @@ export type KpiFormData = {
   businessRules: string;
   dimensions: string[];
   currentCalculationMethod: string;
+  responsibleArea: string;
+  indicatorType: string;
+  indicatorLevel: string;
+  targetValue: string;
+  dataSource: string;
+  strategicObjectives: string;
+  inManagementPlan: boolean;
+  observations: string;
   variables: KpiVariableForm[];
 };
 
@@ -212,7 +220,7 @@ const variableComplete = variableDraft.extend({
 
 const kpiDraftSchema = z.object({
   kpiName: reqText(200),
-  businessDomain: reqEnum(C.BUSINESS_DOMAIN_VALUES),
+  businessDomain: reqEnum(C.KPI_DOMAIN_VALUES),
   kpiObjective: optText(4000),
   unitOfMeasure: optEnum(C.UNIT_OF_MEASURE_VALUES),
   frequency: optEnum(C.FREQUENCY_VALUES),
@@ -221,10 +229,20 @@ const kpiDraftSchema = z.object({
   businessRules: optText(4000),
   dimensions: enumList(C.DIMENSION_VALUES),
   currentCalculationMethod: optEnum(C.CALCULATION_METHOD_VALUES),
+  responsibleArea: optText(300),
+  indicatorType: optText(100),
+  indicatorLevel: optEnum(C.INDICATOR_LEVEL_VALUES),
+  targetValue: optText(300),
+  dataSource: optText(300),
+  strategicObjectives: optText(100),
+  inManagementPlan: z.boolean(),
+  observations: optText(4000),
   variables: z.array(variableDraft).max(50, "Máximo 50 variables"),
 });
 
 const kpiCompleteSchema = kpiDraftSchema.extend({
+  responsibleArea: reqText(300),
+  targetValue: reqText(300),
   kpiObjective: reqText(4000),
   unitOfMeasure: reqEnum(C.UNIT_OF_MEASURE_VALUES),
   frequency: reqEnum(C.FREQUENCY_VALUES),

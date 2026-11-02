@@ -2,7 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/server/db";
 import { requireModule } from "@/lib/server/auth";
 import { formsLockedFor } from "@/lib/server/project";
-import { BUSINESS_DOMAINS, FREQUENCIES, SYSTEM_RANGE, labelOf } from "@/lib/catalogs";
+import { FREQUENCIES, KPI_DOMAINS, SYSTEM_RANGE, labelOf } from "@/lib/catalogs";
 import { hasCompleteEvidence, isVariableMapped } from "@/lib/validation";
 import { Badge, EmptyState, PageHeader, StatusBadge } from "@/components/ui";
 
@@ -27,7 +27,7 @@ export default async function KpisPage({ searchParams }: { searchParams: Promise
         actions={
           !locked && (
             <Link href="/kpis/nuevo" className="btn-primary">
-              + Nuevo KPI
+              + Nuevo indicador
             </Link>
           )
         }
@@ -36,7 +36,7 @@ export default async function KpisPage({ searchParams }: { searchParams: Promise
         <Link href="/kpis" className={`rounded-full px-3 py-1 ring-1 ${!dominio ? "bg-brand-600 text-white ring-brand-600" : "bg-white ring-slate-200"}`}>
           Todos
         </Link>
-        {BUSINESS_DOMAINS.map(([v, l]) => (
+        {KPI_DOMAINS.map(([v, l]) => (
           <Link
             key={v}
             href={`/kpis?dominio=${v}`}
@@ -52,13 +52,14 @@ export default async function KpisPage({ searchParams }: { searchParams: Promise
         </EmptyState>
       ) : (
         <div className="card overflow-x-auto">
-          <table className="data-table min-w-[900px]">
+          <table className="data-table min-w-[1000px]">
             <thead>
               <tr>
                 <th>Código</th>
                 <th>Indicador</th>
                 <th>Dominio</th>
                 <th>Frecuencia</th>
+                <th>Meta</th>
                 <th>Sistemas fuente</th>
                 <th>Evidencia</th>
                 <th>Mapeo TI</th>
@@ -86,9 +87,15 @@ export default async function KpisPage({ searchParams }: { searchParams: Promise
                       <Link href={`/kpis/${k.id}`} className="font-medium text-slate-900 hover:underline">
                         {k.kpiName}
                       </Link>
+                      {k.inManagementPlan && (
+                        <span className="ml-2 align-middle">
+                          <Badge tone="blue">Plan 2026</Badge>
+                        </span>
+                      )}
                     </td>
-                    <td>{labelOf(BUSINESS_DOMAINS, k.businessDomain)}</td>
+                    <td>{labelOf(KPI_DOMAINS, k.businessDomain)}</td>
                     <td>{labelOf(FREQUENCIES, k.frequency)}</td>
+                    <td className="text-xs">{k.targetValue ?? "—"}</td>
                     <td className="text-xs">{systems.join(", ") || "—"}</td>
                     <td>{ev ? <Badge tone="green">Completa</Badge> : <Badge tone="amber">Pendiente</Badge>}</td>
                     <td className="text-xs">

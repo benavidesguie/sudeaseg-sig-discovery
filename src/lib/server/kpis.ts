@@ -23,6 +23,14 @@ export function kpiToForm(k: {
   businessRules: string | null;
   dimensions: unknown;
   currentCalculationMethod: string | null;
+  responsibleArea: string | null;
+  indicatorType: string | null;
+  indicatorLevel: string | null;
+  targetValue: string | null;
+  dataSource: string | null;
+  strategicObjectives: string | null;
+  inManagementPlan: boolean;
+  observations: string | null;
   variables: {
     id: string;
     varName: string;
@@ -44,6 +52,14 @@ export function kpiToForm(k: {
     businessRules: k.businessRules ?? "",
     dimensions: Array.isArray(k.dimensions) ? (k.dimensions as string[]) : [],
     currentCalculationMethod: k.currentCalculationMethod ?? "",
+    responsibleArea: k.responsibleArea ?? "",
+    indicatorType: k.indicatorType ?? "",
+    indicatorLevel: k.indicatorLevel ?? "",
+    targetValue: k.targetValue ?? "",
+    dataSource: k.dataSource ?? "",
+    strategicObjectives: k.strategicObjectives ?? "",
+    inManagementPlan: k.inManagementPlan,
+    observations: k.observations ?? "",
     variables: k.variables.map((v) => ({
       id: v.id,
       varName: v.varName,

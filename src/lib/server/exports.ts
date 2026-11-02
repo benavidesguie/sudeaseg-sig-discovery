@@ -189,6 +189,9 @@ export const TRACE_COLUMNS = [
   ["kpi_name", "Nombre del indicador"],
   ["business_domain", "Dominio"],
   ["kpi_status", "Estado del indicador"],
+  ["responsible_area", "Área responsable"],
+  ["target_value", "Meta"],
+  ["in_management_plan", "Plan de Gestión 2026"],
   ["calculation_formula", "Fórmula"],
   ["business_rules", "Reglas de negocio"],
   ["var_name", "Variable"],
@@ -223,8 +226,11 @@ export async function traceabilityRows(): Promise<TraceRow[]> {
     const base = {
       kpi_code: k.kpiCode,
       kpi_name: k.kpiName,
-      business_domain: C.labelOf(C.BUSINESS_DOMAINS, k.businessDomain),
+      business_domain: C.labelOf(C.KPI_DOMAINS, k.businessDomain),
       kpi_status: C.labelOf(C.KPI_STATUSES, k.status),
+      responsible_area: k.responsibleArea ?? "",
+      target_value: k.targetValue ?? "",
+      in_management_plan: k.inManagementPlan ? "Sí" : "No",
       calculation_formula: k.calculationFormula ?? "",
       business_rules: k.businessRules ?? "",
     };

@@ -12,6 +12,14 @@ export function emptyKpi(): KpiFormData {
     businessRules: "",
     dimensions: [],
     currentCalculationMethod: "",
+    responsibleArea: "",
+    indicatorType: "",
+    indicatorLevel: "",
+    targetValue: "",
+    dataSource: "",
+    strategicObjectives: "",
+    inManagementPlan: false,
+    observations: "",
     variables: [emptyVariable()],
   };
 }

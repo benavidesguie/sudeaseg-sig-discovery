@@ -54,6 +54,14 @@ export async function saveKpi(
       businessRules: nul(data.businessRules),
       dimensions: Array.from(new Set(data.dimensions)),
       currentCalculationMethod: nul(data.currentCalculationMethod),
+      responsibleArea: nul(data.responsibleArea),
+      indicatorType: nul(data.indicatorType),
+      indicatorLevel: nul(data.indicatorLevel),
+      targetValue: nul(data.targetValue),
+      dataSource: nul(data.dataSource),
+      strategicObjectives: nul(data.strategicObjectives),
+      inManagementPlan: data.inManagementPlan,
+      observations: nul(data.observations),
     };
 
     // Reintenta si dos personas crean un KPI del mismo dominio a la vez (choque de código único).
@@ -65,9 +73,13 @@ export async function saveKpi(
           if (kpiId) {
             const current = await tx.kpiCatalog.findUnique({ where: { id: kpiId } });
             if (!current) throw new Error("NOT_FOUND");
-            // El código sigue al dominio: si cambia el dominio se reasigna (KPI-FIN-01 → KPI-COM-03).
+            // El código autogenerado sigue al dominio (KPI-INS-01 → KPI-ACT-03). Los códigos
+            // institucionales cargados desde el catálogo (IND-…) no se reasignan.
+            const autoCode = current.kpiCode.startsWith("KPI-");
             const kpiCode =
-              current.businessDomain === fields.businessDomain ? current.kpiCode : await allocateCode(tx, fields.businessDomain);
+              !autoCode || current.businessDomain === fields.businessDomain
+                ? current.kpiCode
+                : await allocateCode(tx, fields.businessDomain);
             kpi = await tx.kpiCatalog.update({ where: { id: kpiId }, data: { ...fields, kpiCode } });
           } else {
             kpi = await tx.kpiCatalog.create({

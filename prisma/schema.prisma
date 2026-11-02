@@ -136,7 +136,16 @@ model KpiCatalog {
   businessRules            String?  @map("business_rules")
   dimensions               Json     @default("[]")
   currentCalculationMethod String?  @map("current_calculation_method") @db.VarChar(50)
-  status                   String   @default("DRAFT") @db.VarChar(20) // DRAFT | BUSINESS_COMPLETED | TECH_MAPPED
+  // Datos del catálogo institucional de indicadores (SUDEASEG)
+  responsibleArea          String?  @map("responsible_area") @db.VarChar(300)
+  indicatorType            String?  @map("indicator_type") @db.VarChar(100) // Cuantitativo / Avance, Calidad…
+  indicatorLevel           String?  @map("indicator_level") @db.VarChar(30) // SUSTANTIVO | ALTO_NIVEL | APOYO
+  targetValue              String?  @map("target_value") @db.VarChar(300)
+  dataSource               String?  @map("data_source") @db.VarChar(300)
+  strategicObjectives      String?  @map("strategic_objectives") @db.VarChar(100)
+  inManagementPlan         Boolean  @default(false) @map("in_management_plan")
+  observations             String?
+  status                  String   @default("DRAFT") @db.VarChar(20) // DRAFT | BUSINESS_COMPLETED | TECH_MAPPED
   createdById              String?  @map("created_by_id") @db.Uuid
   createdAt                DateTime @default(now()) @map("created_at")
   updatedAt                DateTime @default(now()) @updatedAt @map("updated_at")

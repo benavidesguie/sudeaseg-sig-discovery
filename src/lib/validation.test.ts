@@ -82,7 +82,7 @@ test("cada rol solo modifica su sección del Módulo 1", () => {
 function kpi(overrides: Partial<KpiFormData> = {}): KpiFormData {
   return {
     kpiName: "Cumplimiento",
-    businessDomain: "FINANZAS",
+    businessDomain: "ACTUARIAL",
     kpiObjective: "Decidir",
     unitOfMeasure: "PERCENTAGE",
     frequency: "MONTHLY",
@@ -91,6 +91,14 @@ function kpi(overrides: Partial<KpiFormData> = {}): KpiFormData {
     businessRules: "Sin anuladas",
     dimensions: ["TIEMPO"],
     currentCalculationMethod: "NATIVE_REPORT",
+    responsibleArea: "Dirección Actuarial",
+    indicatorType: "Cuantitativo / Impacto",
+    indicatorLevel: "ALTO_NIVEL",
+    targetValue: ">= 90%",
+    dataSource: "SEFA",
+    strategicObjectives: "1; 2",
+    inManagementPlan: false,
+    observations: "",
     variables: [
       { varName: "Ventas", sourceSystemCode: "SIS-01", screenModuleName: "Ventas", sampleTransactionId: "FAC-1", existsInOtherSystem: false, isSystemOfRecord: true },
     ],
@@ -110,6 +118,16 @@ test("KPI: el borrador exige nombre y dominio; completar exige todo", () => {
   assert.ok(validateKpiDraft(kpi({ variables: [{ ...kpi().variables[0], sourceSystemCode: "SIS-99" }] }))["variables.0.sourceSystemCode"]);
 });
 
+test("KPI: meta y área se exigen solo al completar; nivel y frecuencias institucionales", () => {
+  assert.deepEqual(validateKpiDraft(kpi({ targetValue: "", responsibleArea: "", indicatorLevel: "" })), {});
+  const errs = validateKpiComplete(kpi({ targetValue: "", responsibleArea: "" }));
+  assert.ok(errs.targetValue);
+  assert.ok(errs.responsibleArea);
+  assert.ok(validateKpiDraft(kpi({ indicatorLevel: "OTRO" })).indicatorLevel);
+  assert.deepEqual(validateKpiComplete(kpi({ frequency: "QUARTERLY" })), {});
+  assert.ok(validateKpiDraft(kpi({ businessDomain: "FINANZAS" })).businessDomain, "los dominios de sistemas no aplican a indicadores");
+});
+
 test("KPI: el Excel es obligatorio solo para cruce manual", () => {
   const noFiles = { excel: 0, transaction: 0, report: 0 };
   assert.ok(validateKpiEvidence("MANUAL_EXCEL_CROSSING", noFiles)["evidence.excel"]);
@@ -118,9 +136,9 @@ test("KPI: el Excel es obligatorio solo para cruce manual", () => {
 });
 
 test("código KPI autogenerado por dominio", () => {
-  assert.equal(nextKpiCode("FINANZAS", []), "KPI-FIN-01");
-  assert.equal(nextKpiCode("FINANZAS", ["KPI-FIN-01", "KPI-FIN-07", "KPI-COM-09"]), "KPI-FIN-08");
-  assert.equal(nextKpiCode("ATENCION_CLIENTE", ["KPI-FIN-01"]), "KPI-ATC-01");
+  assert.equal(nextKpiCode("INSPECCION", []), "KPI-INS-01");
+  assert.equal(nextKpiCode("INSPECCION", ["KPI-INS-01", "KPI-INS-07", "KPI-ACT-09", "IND-DEFCSR-01"]), "KPI-INS-08");
+  assert.equal(nextKpiCode("ATENCION_ASEGURADO", ["KPI-INS-01"]), "KPI-ATA-01");
 });
 
 test("homologación: códigos canónicos únicos y obligatorios", () => {

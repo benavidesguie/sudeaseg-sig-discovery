@@ -31,16 +31,35 @@ export const BUSINESS_DOMAINS = [
 ] as const;
 export const BUSINESS_DOMAIN_VALUES = values(BUSINESS_DOMAINS);
 
-// Prefijo usado en el código autogenerado de KPI (KPI-FIN-01).
+// Dominio de los indicadores: áreas de SUDEASEG. Los sistemas siguen usando BUSINESS_DOMAINS.
+export const KPI_DOMAINS = [
+  ["INSPECCION", "Inspección y Fiscalización"],
+  ["ATENCION_ASEGURADO", "Atención y Defensa del Asegurado"],
+  ["AUTORIZACIONES", "Autorizaciones y Registro"],
+  ["ACTUARIAL", "Actuarial y Seguros"],
+  ["LEGAL", "Legal y Sancionatorio"],
+  ["GESTION_INTERNA", "Gestión Interna (Apoyo)"],
+  ["TRANSVERSAL", "Transversal (todas las direcciones)"],
+] as const;
+export const KPI_DOMAIN_VALUES = values(KPI_DOMAINS);
+
+// Prefijo usado en el código autogenerado de KPI (KPI-INS-01).
 export const DOMAIN_PREFIX: Record<string, string> = {
-  FINANZAS: "FIN",
-  COMERCIAL: "COM",
-  OPERACIONES: "OPE",
-  LOGISTICA: "LOG",
-  RRHH: "RRHH",
-  ATENCION_CLIENTE: "ATC",
+  INSPECCION: "INS",
+  ATENCION_ASEGURADO: "ATA",
+  AUTORIZACIONES: "AUT",
+  ACTUARIAL: "ACT",
+  LEGAL: "LEG",
+  GESTION_INTERNA: "GIN",
   TRANSVERSAL: "TRV",
 };
+
+export const INDICATOR_LEVELS = [
+  ["SUSTANTIVO", "Sustantivo"],
+  ["ALTO_NIVEL", "Alto Nivel"],
+  ["APOYO", "Apoyo"],
+] as const;
+export const INDICATOR_LEVEL_VALUES = values(INDICATOR_LEVELS);
 
 export const ACTIVE_USERS_RANGES = [
   ["1-10", "1 - 10"],
@@ -135,6 +154,9 @@ export const FREQUENCIES = [
   ["WEEKLY", "Semanal"],
   ["BIWEEKLY", "Quincenal"],
   ["MONTHLY", "Mensual"],
+  ["QUARTERLY", "Trimestral"],
+  ["SEMIANNUAL", "Semestral"],
+  ["ANNUAL", "Anual"],
 ] as const;
 export const FREQUENCY_VALUES = values(FREQUENCIES);
 
